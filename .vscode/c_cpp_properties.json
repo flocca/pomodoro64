@@ -1,0 +1,21 @@
+{
+    "version": 4,
+    "configurations": [
+        {
+            "name": "C64 (cc65)",
+            "includePath": [
+                "${workspaceFolder}/src",
+                "/opt/homebrew/share/cc65/include"
+            ],
+            "defines": [
+                "__CC65__",
+                "__C64__",
+                "__fastcall__=",
+                "__cdecl__="
+            ],
+            "compilerPath": "",
+            "cStandard": "c99",
+            "intelliSenseMode": "clang-x64"
+        }
+    ]
+}
