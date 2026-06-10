@@ -1,0 +1,45 @@
+# pomodoro64
+
+Pomodoro timer per Commodore 64, scritto in C con [cc65](https://cc65.github.io/).
+
+## Requisiti (macOS)
+
+```sh
+brew install cc65 vice
+```
+
+## Build e run
+
+```sh
+./build.sh run      # compila e lancia in VICE (x64sc)
+./build.sh build    # solo compilazione
+./build.sh clean    # pulizia
+```
+
+Da VSCode: F5 ("Build & Run in VICE") oppure Cmd+Shift+B per la sola build.
+
+La build produce in `build/`:
+
+- `pomodoro64.prg` — eseguibile C64
+- `pomodoro64.lbl` — label per il monitor di VICE (caricate automaticamente da `make run`)
+- `pomodoro64.dbg` — debug info cc65
+- `pomodoro64.map` — mappa del linker
+
+## Uso
+
+Nel menu: **F1/F3/F5** cambiano le durate di lavoro / pausa breve / pausa
+lunga, **SPAZIO** avvia. Durante una fase: **SPAZIO** pausa/riprendi,
+**S** salta alla fase successiva, **R** torna al menu. Ogni 4 pomodori
+completati la pausa è lunga.
+
+## Architettura
+
+| Modulo | Ruolo |
+|---|---|
+| `src/main.c` | macchina a stati (menu → lavoro → pausa), UI conio |
+| `src/tod.c` | cronometro sul Time-of-Day clock del CIA #1: hardware, non deriva; pausa = stop del clock scrivendo il registro ore |
+| `src/bigfont.c` | cifre giganti 5×10 in PETSCII, scrittura diretta in memoria video ($0400/$D800) |
+| `src/sound.c` | beep e jingle sulla voce 1 del SID ($D400) |
+
+Il rilevamento PAL/NTSC (per il flag 50/60Hz del TOD) legge il contatore
+raster a 9 bit del VIC-II: solo il PAL supera la linea 271.

@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Build & Run in VICE",
+            "type": "node-terminal",
+            "request": "launch",
+            "command": "./build.sh run",
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

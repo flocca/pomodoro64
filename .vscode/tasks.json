@@ -1,0 +1,38 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build (cc65)",
+            "type": "shell",
+            "command": "./build.sh build",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": {
+                "owner": "cc65",
+                "fileLocation": ["relative", "${workspaceFolder}"],
+                "pattern": {
+                    "regexp": "^(.*?)\\((\\d+)\\):\\s+(Error|Warning):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "severity": 3,
+                    "message": 4
+                }
+            }
+        },
+        {
+            "label": "run (VICE)",
+            "type": "shell",
+            "command": "./build.sh run",
+            "dependsOn": "build (cc65)",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean",
+            "type": "shell",
+            "command": "./build.sh clean",
+            "problemMatcher": []
+        }
+    ]
+}
