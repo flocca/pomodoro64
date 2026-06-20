@@ -9,8 +9,9 @@ Pomodoro timer for the Commodore 64, written in C with cc65, run in VICE. macOS 
 - Sources are modular: `main.c` (state machine + conio UI), `tod.c` (CIA TOD clock), `bigfont.c` (PETSCII big digits), `sound.c` (SID). Add new `.c` files to `SRCS` in the Makefile.
 
 ## Environment
-- Toolchain: `brew install cc65 vice`. VICE is a **formula, not a cask** (`brew install vice`); the `vice` cask no longer exists.
-- cc65 headers: `/opt/homebrew/share/cc65/include` (stable symlink; prefer over the versioned Cellar path).
+- The toolchain is `cl65` (cc65) + `x64sc` (VICE) on PATH. `Makefile`/`build.sh` are platform-agnostic; only install step and cc65 include path differ by OS.
+- macOS: `brew install cc65 vice`. VICE is a **formula, not a cask** (`brew install vice`); the `vice` cask no longer exists. Headers at `/opt/homebrew/share/cc65/include` (stable symlink; prefer over the versioned Cellar path).
+- Linux: `apt install cc65 vice` (Debian/Ubuntu), `dnf install cc65 vice` (Fedora), `pacman -S cc65 vice` (Arch). Headers typically at `/usr/share/cc65/include`. If `x64sc` reports missing ROMs, install `vice-roms` or drop kernal/basic/chargen into `~/.local/share/vice/C64/`.
 - cc65 2.19 (current Homebrew) has **no `get_tv()`/`TV_NTSC` for the c64 target** — detect PAL/NTSC manually via the VIC-II raster counter (only PAL exceeds line 271). See `tod.c`.
 
 ## Headless testing in VICE
@@ -25,4 +26,4 @@ Pomodoro timer for the Commodore 64, written in C with cc65, run in VICE. macOS 
 - Comments and UI strings in this project are in Italian — match that style.
 
 ## VSCode IntelliSense
-- `.vscode/c_cpp_properties.json` points IntelliSense at the cc65 includes and neutralizes `__fastcall__`/`__cdecl__`. The C/C++(1696) "update includePath" error means that config isn't selected — reload window or pick the "C64 (cc65)" configuration.
+- `.vscode/c_cpp_properties.json` points IntelliSense at the cc65 includes and neutralizes `__fastcall__`/`__cdecl__`. The C/C++(1696) "update includePath" error means that config isn't selected — reload window or pick the "C64 (cc65)" configuration. Its `includePath` hardcodes the macOS Homebrew path; on Linux change it to `/usr/share/cc65/include`.

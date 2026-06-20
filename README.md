@@ -2,11 +2,33 @@
 
 Pomodoro timer per Commodore 64, scritto in C con [cc65](https://cc65.github.io/).
 
-## Requisiti (macOS)
+## Requisiti
+
+Servono il compilatore **cc65** e l'emulatore **VICE** (binario `x64sc`).
+
+**macOS** (Homebrew):
 
 ```sh
 brew install cc65 vice
 ```
+
+**Linux**:
+
+```sh
+# Debian / Ubuntu
+sudo apt install cc65 vice
+
+# Fedora
+sudo dnf install cc65 vice
+
+# Arch
+sudo pacman -S cc65 vice
+```
+
+Su alcune distribuzioni il pacchetto VICE non include le ROM della
+Commodore per motivi di licenza: se `x64sc` si lamenta di ROM mancanti,
+installale con [`vice-roms`](https://vice-emu.sourceforge.io/) o copia
+`kernal`/`basic`/`chargen` in `~/.local/share/vice/C64/`.
 
 ## Build e run
 
