@@ -78,23 +78,30 @@ d64-add: $(PRG)
 HAVE_OPENCBM = command -v cbmcopy >/dev/null 2>&1 || \
 	{ echo "OpenCBM non trovato: brew install opencbm (e collega lo ZoomFloppy)"; exit 1; }
 
+# `cbmctrl reset` azzera il bus IEC: da eseguire sempre per primo, sblocca
+# drive/ZoomFloppy rimasti in stato incoerente da un'operazione precedente.
+RESET = cbmctrl reset
+
 # Check preliminare: conferma che ZoomFloppy e drive UNIT rispondano,
 # da lanciare prima di scrivere. `cbmctrl detect` elenca i drive presenti
 # sul bus IEC; `cbmctrl status` chiede al drive il suo messaggio di stato.
 disk-detect:
 	@command -v cbmctrl >/dev/null 2>&1 || \
 		{ echo "OpenCBM non trovato: brew install opencbm"; exit 1; }
+	$(RESET)
 	cbmctrl detect
 	cbmctrl status $(UNIT)
 
 # Scrive il .prg sul floppy nel drive UNIT, senza formattare (lo affianca agli altri file).
 disk: $(PRG)
 	@$(HAVE_OPENCBM)
+	$(RESET)
 	cbmcopy --transfer=auto -w $(UNIT) -o $(CBMNAME) $(PRG)
 
 # Formatta il floppy (cbmforng) e poi scrive il .prg: disco dedicato.
 disk-format: $(PRG)
 	@$(HAVE_OPENCBM)
+	$(RESET)
 	cbmforng $(UNIT) "$(DISKNAME)"
 	cbmcopy --transfer=auto -w $(UNIT) -o $(CBMNAME) $(PRG)
 
@@ -103,6 +110,7 @@ disk-format: $(PRG)
 disk-image:
 	@command -v d64copy >/dev/null 2>&1 || \
 		{ echo "OpenCBM non trovato: brew install opencbm"; exit 1; }
+	$(RESET)
 	d64copy $(D64) $(UNIT)
 
 clean:
