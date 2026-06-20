@@ -62,6 +62,7 @@ make d64                       # immagine dedicata col solo .prg -> build/pomodo
 make d64-add D64=raccolta.d64  # aggiunge il .prg a un'immagine esistente (altri file intatti)
 
 # Floppy reale via ZoomFloppy + OpenCBM
+make disk-detect               # verifica che ZoomFloppy e drive rispondano (lancialo per primo)
 make disk                      # scrive il .prg sul floppy, affiancandolo agli altri file
 make disk-format               # formatta il floppy e poi scrive il .prg (disco dedicato)
 make disk-image D64=build/pomodoro64.d64  # copia un'intera immagine sul floppy

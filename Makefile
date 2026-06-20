@@ -10,6 +10,7 @@
 #   make d64-add D64=x.d64   -> aggiunge il .prg a un'immagine esistente (altri file inclusi)
 #
 # Drive reale via ZoomFloppy + OpenCBM (richiede `brew install opencbm`, UNIT=8 default):
+#   make disk-detect         -> verifica che ZoomFloppy e drive rispondano (da lanciare per primo)
 #   make disk                -> scrive il .prg sul floppy nel drive (non formatta)
 #   make disk-format         -> formatta il floppy e poi scrive il .prg (disco dedicato)
 #   make disk-image D64=x.d64-> copia un'intera immagine .d64 sul floppy (d64copy)
@@ -42,7 +43,7 @@ MAP      := $(BUILD)/$(PROG).map
 CFLAGS  := -t c64 -O -g
 LDFLAGS := -Ln $(LBL) -Wl --dbgfile,$(DBG) -m $(MAP)
 
-.PHONY: all run clean d64 d64-add disk disk-format disk-image
+.PHONY: all run clean d64 d64-add disk-detect disk disk-format disk-image
 
 all: $(PRG)
 
@@ -76,6 +77,15 @@ d64-add: $(PRG)
 # Guardia: i target disk* richiedono cbmcopy/cbmforng/d64copy sul PATH.
 HAVE_OPENCBM = command -v cbmcopy >/dev/null 2>&1 || \
 	{ echo "OpenCBM non trovato: brew install opencbm (e collega lo ZoomFloppy)"; exit 1; }
+
+# Check preliminare: conferma che ZoomFloppy e drive UNIT rispondano,
+# da lanciare prima di scrivere. `cbmctrl detect` elenca i drive presenti
+# sul bus IEC; `cbmctrl status` chiede al drive il suo messaggio di stato.
+disk-detect:
+	@command -v cbmctrl >/dev/null 2>&1 || \
+		{ echo "OpenCBM non trovato: brew install opencbm"; exit 1; }
+	cbmctrl detect
+	cbmctrl status $(UNIT)
 
 # Scrive il .prg sul floppy nel drive UNIT, senza formattare (lo affianca agli altri file).
 disk: $(PRG)
