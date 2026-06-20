@@ -47,6 +47,29 @@ La build produce in `build/`:
 - `pomodoro64.dbg` — debug info cc65
 - `pomodoro64.map` — mappa del linker
 
+## Immagini disco e drive reale
+
+Due strumenti distinti, con scopi diversi:
+
+- **`c1541`** (incluso in VICE) lavora **lato host** sui file immagine `.d64`.
+- **OpenCBM** (`brew install opencbm`) scrive su un **floppy 1541 reale** tramite
+  uno **ZoomFloppy** (interfaccia XUM1541 via USB). I target `disk*` richiedono
+  che OpenCBM sia installato e lo ZoomFloppy collegato; `UNIT=8` di default.
+
+```sh
+# Immagine .d64 (host)
+make d64                       # immagine dedicata col solo .prg -> build/pomodoro64.d64
+make d64-add D64=raccolta.d64  # aggiunge il .prg a un'immagine esistente (altri file intatti)
+
+# Floppy reale via ZoomFloppy + OpenCBM
+make disk                      # scrive il .prg sul floppy, affiancandolo agli altri file
+make disk-format               # formatta il floppy e poi scrive il .prg (disco dedicato)
+make disk-image D64=build/pomodoro64.d64  # copia un'intera immagine sul floppy
+```
+
+Il nome del file su disco è `pomodoro64` (variabile `CBMNAME`); etichetta e id
+del disco sono `pomodoro64,p1` (`DISKNAME`). Cambia `UNIT` se il drive non è l'8.
+
 ## Uso
 
 Nel menu: **F1/F3/F5** cambiano le durate di lavoro / pausa breve / pausa

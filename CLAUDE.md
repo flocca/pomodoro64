@@ -6,6 +6,7 @@ Pomodoro timer for the Commodore 64, written in C with cc65, run in VICE. macOS 
 - `make` / `./build.sh build` — compile to `build/pomodoro64.prg` (+ `.lbl`, `.dbg`, `.map`)
 - `make run` / `./build.sh run` — build and launch in VICE (`x64sc`), label file loaded into the monitor
 - `make clean` — remove `build/` and `src/*.o`
+- Disk images (host, via VICE's `c1541`): `make d64` (dedicated `.d64` with just the prg), `make d64-add D64=img.d64` (add prg to an existing image; idempotent — deletes the old copy first). Real 1541 via ZoomFloppy + OpenCBM (`brew install opencbm`, guarded targets, `UNIT=8`): `make disk` (write prg, no format), `make disk-format` (cbmforng then write), `make disk-image` (d64copy whole image). `c1541` ≠ OpenCBM: c1541 edits image files, OpenCBM talks to real drives.
 - Sources are modular: `main.c` (state machine + conio UI), `tod.c` (CIA TOD clock), `bigfont.c` (PETSCII big digits), `sound.c` (SID). Add new `.c` files to `SRCS` in the Makefile.
 
 ## Environment
